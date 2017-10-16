@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * Created by hy on 2017/10/13.
  */
-public class RegisterController implements ISubscriber {
+public class RegisterController extends BaseController {
 
-    private Filter filter;
+
 
 
     private RegisterController() {
-        filter = new Filter();
+
     }
 
 
@@ -32,16 +32,10 @@ public class RegisterController implements ISubscriber {
         return Factory.controller;
     }
 
+
     @Override
-    public void getEvent(IEvent event, EventCallBack callBack) {
+    public void onGetEvent(IEvent event) {
         RegisterEvent registerEvent = (RegisterEvent) event;
-        if (filter.consume(event)) {
-            if (callBack != null)
-                callBack.isAccept(false);
-            return;
-        }
-        if (callBack != null)
-            callBack.isAccept(true);
         if (registerEvent.getUseOpId() == Config.OP.WRITE) {
             addUser(registerEvent);
         }

@@ -12,12 +12,20 @@ import java.sql.SQLException;
 /**
  * Created by hy on 2017/10/14.
  */
-public class LoginController implements ISubscriber {
+public class LoginController extends BaseController {
 
-    private Filter filter;
+
 
     private LoginController() {
-        filter = new Filter();
+
+    }
+
+    @Override
+    public void onGetEvent(IEvent event) {
+        LoginEvent loginEvent =(LoginEvent) event;
+        if (loginEvent.getUseOpId() == Config.OP.WRITE){
+            doLogin(loginEvent);
+        }
     }
 
     private static class Factory {
@@ -28,20 +36,8 @@ public class LoginController implements ISubscriber {
         return Factory.controller;
     }
 
-    @Override
-    public void getEvent(IEvent event, EventCallBack callBack) {
-        LoginEvent loginEvent =(LoginEvent) event;
-        if (filter.consume(event)) {
-            if (callBack != null)
-                callBack.isAccept(false);
-            return;
-        }
-        if (callBack != null)
-            callBack.isAccept(true);
-        if (loginEvent.getUseOpId() == Config.OP.WRITE){
-            doLogin(loginEvent);
-        }
-    }
+
+
 
     private void doLogin(LoginEvent loginEvent) {
         String userName = loginEvent.getUserName();

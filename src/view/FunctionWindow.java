@@ -6,8 +6,6 @@ import event.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 /**
  * Created by hy on 2017/10/14.
@@ -17,22 +15,7 @@ public class FunctionWindow implements IPublisher, OnRoleChanged {
 
 
     private FunctionWindow() {
-        workNameText.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                WorkInfoEvent event = new WorkInfoEvent();
-                event.setOpId(Config.OP.WRITE);
-                sendEvent(event, new CallBack());
-            }
-        });
-        contentText.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                WorkInfoEvent event = new WorkInfoEvent();
-                event.setOpId(Config.OP.WRITE);
-                sendEvent(event, new CallBack());
-            }
-        });
+
         assessmentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,6 +50,18 @@ public class FunctionWindow implements IPublisher, OnRoleChanged {
         });
     }
 
+    private void sendTextUsableEvent() {
+        WorkInfoEvent event = new WorkInfoEvent();
+        event.setOpId(Config.OP.WRITE);
+        sendEvent(event, new EventCallBack() {
+            @Override
+            public void isAccept(boolean isAccept) {
+                workNameText.setEnabled(isAccept);
+                contentText.setEnabled(isAccept);
+            }
+        });
+    }
+
     static class CallBack implements EventCallBack {
         @Override
         public void isAccept(boolean isAccept) {
@@ -97,6 +92,7 @@ public class FunctionWindow implements IPublisher, OnRoleChanged {
 
     public void init() {
         sendReadableEvent();
+        sendTextUsableEvent();
     }
 
     private void sendReadableEvent() {
@@ -108,7 +104,6 @@ public class FunctionWindow implements IPublisher, OnRoleChanged {
                 assessmentButton.setVisible(isAccept);
             }
         });
-
         CountEvent countEvent = new CountEvent();
         countEvent.setOpId(Config.OP.READ);
         sendEvent(countEvent, new EventCallBack() {
@@ -119,8 +114,6 @@ public class FunctionWindow implements IPublisher, OnRoleChanged {
 
             }
         });
-
-
         GradeEvent gradeEvent = new GradeEvent();
         gradeEvent.setOpId(Config.OP.READ);
         sendEvent(gradeEvent, new EventCallBack() {
@@ -131,7 +124,6 @@ public class FunctionWindow implements IPublisher, OnRoleChanged {
 
             }
         });
-
 
         SubmitEvent submitEvent = new SubmitEvent();
         submitEvent.setOpId(Config.OP.READ);

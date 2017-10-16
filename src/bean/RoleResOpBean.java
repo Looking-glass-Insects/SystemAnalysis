@@ -3,7 +3,7 @@ package bean;
 /**
  * Created by hy on 2017/10/14.
  */
-public class RoleResOpBean {
+public class RoleResOpBean implements IBean{
     private int roleId;
     private int resId;
     private int opId;

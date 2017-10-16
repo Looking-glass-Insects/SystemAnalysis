@@ -3,7 +3,7 @@ package bean;
 /**
  * Created by hy on 2017/10/13.
  */
-public class RoleBean {
+public class RoleBean implements IBean{
     private int id;
     private String name;
 

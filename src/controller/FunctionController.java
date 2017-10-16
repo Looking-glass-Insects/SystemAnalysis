@@ -7,23 +7,16 @@ import filter.Filter;
 /**
  * Created by hy on 2017/10/14.
  */
-public class FunctionController implements ISubscriber {
+public class FunctionController extends BaseController {
 
-    private Filter filter;
-
-    @Override
-    public void getEvent(IEvent event, EventCallBack callBack) {
-        if (filter.consume(event)) {
-            if (callBack != null)
-                callBack.isAccept(false);
-            return;
-        }
-        if (callBack != null)
-            callBack.isAccept(true);
-    }
 
     private FunctionController() {
-        filter = new Filter();
+
+    }
+
+    @Override
+    public void onGetEvent(IEvent event) {
+
     }
 
     private static class Factory{

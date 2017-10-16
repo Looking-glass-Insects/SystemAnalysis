@@ -15,21 +15,13 @@ import java.util.List;
 /**
  * Created by hy on 2017/10/14.
  */
-public class AuthController implements ISubscriber{
-
-    private Filter filter ;
+public class AuthController extends BaseController{
 
     private AuthController() {
-        filter = new Filter();
+        super();
     }
-
     @Override
-    public void getEvent(IEvent event, EventCallBack callBack) {
-        if (filter.consume(event)) {
-            if (callBack != null)
-                callBack.isAccept(false);
-            return;
-        }
+    public void onGetEvent(IEvent event) {
         ManageEvent manageEvent = (ManageEvent) event;
         ManageEvent.EventOP op = manageEvent.getEventOP();
         int roleId =  manageEvent.getRoleId();
@@ -52,8 +44,6 @@ public class AuthController implements ISubscriber{
                 JOptionPane.showConfirmDialog(null, "失败", "提示", JOptionPane.YES_NO_OPTION);
             }
         }
-        if (callBack != null)
-            callBack.isAccept(true);
     }
 
     public static AuthController getController() {
